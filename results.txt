@@ -1,0 +1,10 @@
+泉州是哪个省	True Answer:福建	Predict Answer:福建	福建省
+孕妇生娃娃一个成语是什么	True Answer:血口喷人	Predict Answer:呵	费玉清	血口喷人
+忘了吃忘了睡换成成语	True Answer:废寝忘食	Predict Answer:废寝忘食顾不得	顾不得	寝食难安	废寝忘食	子路
+泗洪是哪个市的	True Answer:宿迁市	Predict Answer:政区	宿迁市	青阳镇
+查德威克是谁的学生	True Answer:卢瑟福	Predict Answer:布尔斯特罗的小姐信心十足，有了一帮优秀的学生，再加上资深教师查德威克、里奇	与此同时	卢瑟福	√	√　泡利是索末菲的学生　正确答案：√
+0577是哪个城市的区号	True Answer:温州	Predict Answer:温州	◎　浙江　温州
+钱塘湖春行的钱塘湖是	True Answer:西湖	Predict Answer:西湖
+山水有相逢下一句	True Answer:春风入卷来	Predict Answer:咱们	春风入卷
+番禺区属于哪个省	True Answer:广东省	Predict Answer:广东省	江苏省	已转
+诸暨是哪个省的	True Answer:浙江省	Predict Answer:浙江省
