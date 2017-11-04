@@ -1,4 +1,5 @@
-#coding:utf-8
+#!/bin/env python3
+#-*- text-encoding: utf-8 -*-
 import tensorflow as tf
 import random
 from data import buildTrainDataIndex,getTrainData,transSent2Idx,vocab_size,readTrainData,bm25_model,tokenize
