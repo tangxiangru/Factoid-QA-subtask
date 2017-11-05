@@ -206,7 +206,7 @@ def buildTrainDataIndex(tokenizedTrainData,word2idx,question_len=query_len,passa
            qscores,\
            overlaps
     
-def getTrainData(split=0.8):
+def getTrainData(split=1):
     '''切分训练集和验证集'''
     dump_path="./datasets/temp/train_valid_data.np"
     if os.path.exists(dump_path):
@@ -215,7 +215,7 @@ def getTrainData(split=0.8):
         res=tokenizeTrainData()
         num=len(res)
         #res=random.sample(res,num)
-        train_num=int(num*0.8)
+        train_num=int(num*1)
         
         sentences=getSentences(res)
         id2w,w2id,fre=buildVocab(sentences)
