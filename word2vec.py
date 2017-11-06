@@ -49,8 +49,8 @@ def buildEmbedding():
     
     
 if __name__=="__main__":
-#    get_corpora()
-#    train_word2vec()
-#    model=load_model()
-    embedding=buildEmbedding()
+   get_corpora()
+   train_word2vec()
+   model=load_model()
+   embedding=buildEmbedding()
 

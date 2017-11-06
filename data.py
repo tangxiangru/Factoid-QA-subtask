@@ -1,4 +1,5 @@
 #coding:utf-8
+import sys
 import json
 import jieba
 import nltk
@@ -10,9 +11,11 @@ import random
 from BM25Sim import BM25Sim
 import pandas as pd
 
+
+
 data_path='./datasets/train_factoid_1.json'
-tokenized_path="./datasets/temp/tokenized_data.pkl"
-vocab_path="./datasets/temp/vocab.pkl"
+tokenized_path="./datasets/tokenized_data.pkl"
+vocab_path="./datasets/vocab.pkl"
 passage_len=301
 query_len=30
 answer_len=5
@@ -117,10 +120,10 @@ def get_question_passages():
         questions.append(query_words)
         passages.append(pass_words)
     return questions,passages
-    
+
 questions,passages=get_question_passages()
 bm25_model=BM25Sim(passages)
-    
+
 def getSentences(tokenizedTrainData):
     sentences=[]
     for query_id,query_words,pass_id,pass_words,answer_words,start,end,score,qscore in tokenizedTrainData:
@@ -208,9 +211,9 @@ def buildTrainDataIndex(tokenizedTrainData,word2idx,question_len=query_len,passa
     
 def getTrainData(split=1):
     '''切分训练集和验证集'''
-    dump_path="./datasets/temp/train_valid_data.np"
+    dump_path="./datasets/train_valid_data.np"
     if os.path.exists(dump_path):
-        return pickle.load(open(dump_path,"rb"))
+        return pd.read_pickle('./datasets/train_valid_data.np')
     else:
         res=tokenizeTrainData()
         num=len(res)
@@ -245,10 +248,10 @@ if __name__=="__main__":
     res=tokenizeTrainData()
     sentences=getSentences(res)
     id2w,w2id,fre=buildVocab(sentences)
-    query_ids,query,pass_ids,passage,answer,starts,ends,scores,qscores=buildTrainDataIndex(res,w2id)
+    query_ids,query,pass_ids,passage,answer,starts,ends,scores,qscores,overlaps=buildTrainDataIndex(res,w2id)
     
     train_data,valid_data=getTrainData()
-    query_ids,querys,pass_ids,passages,answer,starts,ends,scores,qscores=train_data
-    vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores=valid_data
+    query_ids,querys,pass_ids,passages,answer,starts,ends,scores,qscores,overlaps=train_data
+    vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores,overlaps=valid_data
     
 

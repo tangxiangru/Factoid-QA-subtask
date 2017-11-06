@@ -15,6 +15,7 @@ class BaseModel(object):
         self.vocab_size=vocab_size
         self.learning_rate=learning_rate
         self.embedding=buildEmbedding().astype("float32")
+        print(self.embedding.shape)
         self.query_len=30
         self.passage_len=301
         self.ckpt_path=get_weight_path(self,base_weight_path)
@@ -41,7 +42,9 @@ class BaseModel(object):
         starts=tf.clip_by_value(starts,clip_value_min=0,clip_value_max=self.passage_len-1)
         ends=tf.clip_by_value(ends,clip_value_min=0,clip_value_max=self.passage_len-1)
         with tf.variable_scope("embedding"):
+            print(self.embedding[10:,])
             W=tf.get_variable(name="embedding",initializer=self.embedding,trainable=False)
+            #W=tf.get_variable(name="embedding",initializer=None,trainable=True,shape=self.embedding.shape)
             query_embeded=tf.nn.embedding_lookup(W,query_in)
             passage_embeded=tf.nn.embedding_lookup(W,passage_in)
             
@@ -325,9 +328,10 @@ if __name__=="__main__":
     vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores,voverlaps=valid_data
     
     model=BaseModel()
-    model.restore_last_session()
-#    model.train(querys,passages,starts,ends,scores,overlaps,
-#                vquerys,vpassages,vstarts,vends,voverlaps,batch_size=64,iter_num=20)
+    #model.restore_last_session()
+    model.train(querys,passages,starts,ends,scores,overlaps,
+                vquerys,vpassages,vstarts,vends,voverlaps,batch_size=64,iter_num=20)
+    model.save_weights()
             
     pre_starts,pre_ends,pre_scores=model.predict(vquerys,vpassages,voverlaps)
     datas=readTrainData()
