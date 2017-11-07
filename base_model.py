@@ -323,16 +323,21 @@ def predictAnswer(datas,model,output="results.txt"):
             log("right:%s/%s, acc:%s"%(right,len(datas),right/len(datas)))
         
 if __name__=="__main__":
+    log('initializing train data')
     train_data,valid_data=getTrainData()
     query_ids,querys,pass_ids,passages,answer,starts,ends,scores,qscores,overlaps=train_data
     vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores,voverlaps=valid_data
     
+    log('creating model')
     model=BaseModel()
     #model.restore_last_session()
+    log('train launched.')
     model.train(querys,passages,starts,ends,scores,overlaps,
                 vquerys,vpassages,vstarts,vends,voverlaps,batch_size=64,iter_num=20)
+    log('saving weights')
     model.save_weights()
-            
+    
+    log('launching prediction')
     pre_starts,pre_ends,pre_scores=model.predict(vquerys,vpassages,voverlaps)
     datas=readTrainData()
     predictAnswer(datas[-10:],model)
