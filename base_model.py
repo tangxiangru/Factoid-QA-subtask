@@ -328,9 +328,9 @@ if __name__=="__main__":
     query_ids,querys,pass_ids,passages,answer,starts,ends,scores,qscores,overlaps=train_data
     vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores,voverlaps=valid_data
     
-    log('creating model')
+    log('creating model(restore)')
     model=BaseModel()
-    #model.restore_last_session()
+    model.restore_last_session()
     log('train launched.')
     model.train(querys,passages,starts,ends,scores,overlaps,
                 vquerys,vpassages,vstarts,vends,voverlaps,batch_size=64,iter_num=20)
