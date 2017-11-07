@@ -2,3 +2,6 @@
 *.gi
 *.pyc
 .DS_Store
+.vscode
+.idea
+.code

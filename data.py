@@ -11,7 +11,7 @@ import random
 from BM25Sim import BM25Sim
 import pandas as pd
 
-
+from myutils.rlog import *
 
 data_path='./datasets/train_factoid_1.json'
 tokenized_path="./datasets/tokenized_data.pkl"
@@ -67,10 +67,11 @@ def computDocQuestionScore(question,doc,model):
 def tokenize(text):
     '''分词'''
     return jieba.lcut(text)
-    
+
 def readTrainData(path=data_path):
     '''读取数据
     '''
+    log('reading train data')
     datas=[]
     with open(path,encoding='utf-8') as f:
         for line in f:
@@ -86,6 +87,7 @@ def tokenizeTrainData(path=data_path):
     输出:
         训练数据：
     '''
+    log('tokenzing train data')
     dump_path=tokenized_path
     if os.path.exists(dump_path):
         return pickle.load(open(dump_path,"rb"))

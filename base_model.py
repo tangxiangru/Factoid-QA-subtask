@@ -6,6 +6,7 @@ from data import buildTrainDataIndex,getTrainData,transSent2Idx,vocab_size,readT
 import numpy as np
 from word2vec import buildEmbedding
 from myutils.train_util import get_weight_path
+from myutils.rlog import *
 
 base_weight_path="weights/"
 
@@ -234,13 +235,13 @@ class BaseModel(object):
                 total_loss+=err
                 #print("iter num: %s,error:%s"%(i,err))
             avg_loss=total_loss/(len(querys)+batch_size-1)*batch_size
-            print("iter num: %s, total_loss:%s, loss: %s" %(i,total_loss,avg_loss))
+            log("[{}/{}] total loss={}, average loss={}".format(i, iter_num, total_loss, avg_loss))
             self.save_weights()
             #预测
             pre_starts,pre_ends,pre_scores=self.predict(vquerys,vpassages,voverlaps)
             acc_starts=np.sum((pre_starts==vstarts)&(pre_ends==vends))/len(vstarts)
             acc_ends=np.sum(pre_ends==vends)/len(vends)
-            print("start accuracy: %s, end accuracy: %s"%(acc_starts,acc_ends))
+            log("start accuracy: %s, end accuracy: %s"%(acc_starts,acc_ends))
                 
         
     def predict(self,querys,passages,overlaps):
@@ -295,32 +296,31 @@ class BaseModel(object):
         return "".join(answer),score
         
 def predictAnswer(datas,model,output="results.txt"):
+    log('predicting answer.')
     with open(output,"w",encoding='utf-8') as f:
         right=0
-        count=0
-        for d in datas:
-            count+=1
-            q=d['query']
-            ps=d['passages']
-            answer=d['answer']
-            print("question:",q)
-            print("answer:",answer)
+        for line in datas:
+            query=line['query']
+            passages=line['passages']
+            true_answer=line['answer']
+            log("predict answer: question ~ " + query)
+            log("answer ~ " + true_answer)
         
-            answers=[]
+            my_answers=[]
             scores=[]
-            for i in range(len(ps)):
-                a,score=model.extractAnswer(q,ps[i]['passage_text'])
+            for passage in passages:
+                my_answer,score=model.extractAnswer(query,passage['passage_text'])
 #                print(a,score,answer in ps[i]['passage_text'])
-                bm25_score=bm25_model.compute_score(tokenize(q),tokenize(ps[i]['passage_text']))
+                bm25_score=bm25_model.compute_score(tokenize(query),tokenize(passage['passage_text']))
                 scores.append(bm25_score)
-                if a is '':
+                if my_answer is '':
                     continue
-                answers.append(a)
-                print(a,bm25_score,answer in ps[i]['passage_text'])
-            if answer in answers:
+                answers.append(my_answer)
+                print(my_answer,bm25_score,true_answer in passage['passage_text'])
+            if true_answer in my_answers:
                 right+=1
-            f.write(q+"\tTrue Answer:"+answer+"\tPredict Answer:"+"\t".join(list(set(answers)))+"\n")
-            print("right:%s/%s, acc:%s"%(right,count,right/count))
+            f.write(query+"\tTrue Answer:"+true_answer+"\tPredict Answer:"+"\t".join(list(set(my_answers)))+"\n")
+            log("right:%s/%s, acc:%s"%(right,len(datas),right/len(datas)))
         
 if __name__=="__main__":
     train_data,valid_data=getTrainData()
