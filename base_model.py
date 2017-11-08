@@ -236,7 +236,7 @@ class BaseModel(object):
                 #print("iter num: %s,error:%s"%(i,err))
             avg_loss=total_loss/(len(querys)+batch_size-1)*batch_size
             log("[{}/{}] total loss={}, average loss={}".format(i, iter_num, total_loss, avg_loss))
-            self.save_weights()
+            self.save_weights(i)
             #预测
             pre_starts,pre_ends,pre_scores=self.predict(vquerys,vpassages,voverlaps)
             acc_starts=np.sum((pre_starts==vstarts)&(pre_ends==vends))/len(vstarts)
@@ -267,16 +267,16 @@ class BaseModel(object):
             pre_scores.extend(np.reshape(scores,[scores.shape[0],]))
             
         return np.array(pre_starts),np.array(pre_ends),np.array(pre_scores)
-    def save_weights(self):
+    def save_weights(self,step=None):
         saver=tf.train.Saver()
-        saver.save(self.sess,self.ckpt_path)
+        saver.save(self.sess,self.ckpt_path,global_step=step)
     def restore_last_session(self):
         saver = tf.train.Saver()
         saver.restore(self.sess, self.ckpt_path)
             
             
     def extractAnswer(self,query,passage):
-        '''抽取答案
+        '''抽取答案:
         param: 
             query: 问题文本
             passage: 段落文本
