@@ -1,77 +1,52 @@
-## 开发环境说明
-
+## Dependenices
 * python 3.5
 * tensorflow 1.3
-* 分词工具：jieba
+* Chinese Words Segementation：jieba
 
-## 文件目录说明
-1. datasets 存放数据
-2. data: 处理数据
-3. models: 模型
-4. weights: 保存参数
-5. myutils: 通用的API
-6. docs: 文档 
+## Directory
+
+1. datasets：data
+2. data: preprocessing
+3. models: model
+4. weights: checkpoint
+5. myutils: API
+6. docs: document
 
 
-## 训练数据格式
-1. 每条数据：
+## Data format
+1. for each data：
 
 (query_id, question, passage_id, passage, answer, start, end, docAnswerScore,docQuestionScore,overlaps)
 
- (问题，文档，答案，开始位置，结束位置，文档类别, 文档与答案的匹配得分，文档与问题的匹配得分,)
  
- * question: 问题中单词的id
- * passage: 文档中单词的id
- * answer: 答案中单词的id
- * start: 答案在文档里的开始位置
- * end: 答案在文档里的结束位置
- * docAnswerScore: 文档与答案的匹配得分（包含答案为1，不包含答案为0）
- * docQuestionScore:
- 文档与问题的匹配得分
- * overlaps: 文档中词是否在问题中出现：出现为1，没有出现为0
+ * question: word id
+ * passage: word id
+ * answer: word id
+ * start: start position
+ * end: end position
+ * docAnswerScore: if answer is in document:1, if not0）
+ * docQuestionScore: matching score
+ * overlaps: if document word is in question:1，if not:0
  
- 2. 特征抽取
+ 2. Label
+ * predict： start, end 
+ * sequence labeling： BIO
  
- *	词向量
- *	字向量
- *	字->词 (FOFE, RNN，...)
- *	词性标注
- *	命名实体识别
- *	文档中词是否在问题中
- *	IF-IDF
- *	主题词，关键词抽取
- *	词典?
- *	...
-
- 4. 数据标签
- * 预测开始和结束位置： start, end 标注
- * 序列标注的方式： BIO标注
- 
- ## 测试
- 
- 1. 构建测试集
- 
- 2. 计算F1, Accuarcy
 
 
-
-# 评测描述
+# Evaluation
 q | a
 ---- | ---
-任务类型 | Factoid Q&A subtask
-评价指标 |  Accuracy计算预测答案和标准答案是否精确匹配、F1计算预测答案相对标准答案的词级重合度）
-问题类型 | 事实类
-问题数量 |  3万
-候选篇章 |  每个问题10个候选篇章（提供来源网页URL）
-标准答案数量 |  唯一答案
-标准答案产生方式 |  完全从候选篇章中截取
-标准答案长度 |  20字以内
-参赛者提交答案 |  针对每个问题，从候选篇章中提取答案文本
-
-**对于每个事实类问题q，标注人员阅读相应候选答案篇章a1，a2，…，an，从候选篇章中抽取合适的词语、短语或句子，形成一段正确、完整、简洁的文本，作为问题的标准答案a***
+task | Factoid Q&A subtask
+metric |  Accuracy, F1
+data num |  3w
+candidate |  10documents each question
+answer num |  1
+answer length |  <20
 
 
-# 样例
+
+# Sample
 ```
 {
 “query_id”: 10000,
@@ -87,60 +62,17 @@ question/713780769091877645”, “passage_text”: “中国新疆的塔里木�
 ```
 
 
-# 结果提交
-参赛者每次按要求提交的内容包括：
 
-（1）全部源代码和数据；
+# Timeline
 
-（2）程序在测试集上的执行流程说明，以及程序说明文档。
-
-参赛者的测试结果在评测方提供的计算环境里完成计算：基于参赛者提交的代码在评测方提供的平台上按指定命令方式执行
-
-# 时间
-
-时间 | 事项
+time | todo
 ---- | ---
-2017年9月1日 | 开始报名
-2017年9月22日 | 发布第一批事实类问答任务的训练集（针对所有参赛选手）
-2017年10月10日 | 发布事实类问答任务的验证集（针对所有参赛选手）
-2017年10月16日 | 	开放选手提交结果入口
-2017年10月23日 | 发布排行榜（持续更新）
-2017年11月1日 | 发布第二批事实类问答任务的训练集（针对已经提交结果的参赛选手）
-2017年11月24日 | 发布第三批事实类问答任务的训练集（针对已经提交结果的参赛选
-2018年 | 2018年CIPS学术年会上举行颁奖仪式
+2017/9/1 | Start
+2017/9/22 | Implement
+2017/10/10 | Data release
+2017/10/16 | 	Submit
+2017/10/23 | Optimize
+2017/11/1 | Finish
 
 
-# 模型
-## 数据预处理
 
-1. 分词，分字
-2. 词性标注，命名实体识别
-3. 统计词频，tf-idf
-4. 句法分析，依存关系表示学习
-5. 训练词向量
-6. N-gram向量
-7. 建立词库，字库
-8. 主题词，关键词抽取
-
-## 数据清洗
-
-## 数据分析
-
-# 特征抽取
-1. 词向量
-2. 依存关系表示
-3. 子向量
-4. 上下文表示
-5. N-gram
-6. 文档中词是否在问题中出现
-7. 
-
-## 模型构建
-
-
-## 模型融合
-
-## 答案选择
-
- 
- 

@@ -306,6 +306,7 @@ def predictAnswer(datas,model,output="results.txt"):
             log("predict answer: question ~ " + query)
             log("answer ~ " + true_answer)
         
+
             my_answers=[]
             scores=[]
             for passage in passages:
@@ -322,12 +323,13 @@ def predictAnswer(datas,model,output="results.txt"):
             f.write(query+"\tTrue Answer:"+true_answer+"\tPredict Answer:"+"\t".join(list(set(my_answers)))+"\n")
             log("right:%s/%s, acc:%s"%(right,len(datas),right/len(datas)))
         
+
 if __name__=="__main__":
     log('initializing train data')
     train_data,valid_data=getTrainData()
     query_ids,querys,pass_ids,passages,answer,starts,ends,scores,qscores,overlaps=train_data
     vquery_ids,vquerys,vpass_ids,vpassages,vanswer,vstarts,vends,vscores,vqscores,voverlaps=valid_data
-    
+
     log('creating model(restore)')
     model=BaseModel()
     model.restore_last_session()
@@ -340,6 +342,6 @@ if __name__=="__main__":
     log('launching prediction')
     pre_starts,pre_ends,pre_scores=model.predict(vquerys,vpassages,voverlaps)
     datas=readTrainData()
-    predictAnswer(datas[-10:],model)
+    predictAnswer(datas,model)
     
         

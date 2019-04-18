@@ -211,7 +211,7 @@ def buildTrainDataIndex(tokenizedTrainData,word2idx,question_len=query_len,passa
            qscores,\
            overlaps
     
-def getTrainData(split=1):
+def getTrainData(split=0.8):
     '''切分训练集和验证集'''
     dump_path="./datasets/train_valid_data.np"
     if os.path.exists(dump_path):
@@ -221,7 +221,7 @@ def getTrainData(split=1):
         num=len(res)
         #res=random.sample(res,num)
         train_num=int(num*1)
-        
+    
         sentences=getSentences(res)
         id2w,w2id,fre=buildVocab(sentences)
         
@@ -235,7 +235,7 @@ def getTrainData(split=1):
         valid_data=[query_ids,query,pass_ids,passage,answer,starts,ends,scores,qscores,overlaps]
         
         pickle.dump([train_data,valid_data],open(dump_path,"wb"))
-        return train_data,valid_data
+        return train_data
 id2w,w2id,fre=buildVocab()    
 def transSent2Idx(sent,max_len,pad_value=0,word2idx=w2id):
     '''句子转换成index'''
